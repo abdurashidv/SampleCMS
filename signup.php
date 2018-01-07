@@ -5,29 +5,30 @@
 
 	//Processing
     if(isset($_POST['submit'])) {
-        $firstname = pg_escape_string($_POST['firstname']);
-		$lastname = pg_escape_string($_POST['lastname']);
-		$displayName = pg_escape_string($_POST['displayName']);
-		$login = pg_escape_string($_POST['login']);
-		$password1 = pg_escape_string($_POST['password']);
-		$password2 = pg_escape_string($_POST['password_confirmation']);
+        $firstname = $_POST['firstname'];
+		$lastname = $_POST['lastname'];
+		$displayName = $_POST['displayName'];
+		$login = $_POST['login'];
+		$password1 = $_POST['password'];
+		$password2 = $_POST['password_confirmation'];
 
-		if(strlen($firstname)>0 && strlen($lastname)>0 && strlen($login)>0 && strlen($password1)>0 && strlen($password2)>0){
+		if(strlen($firstname)>0 && strlen($lastname)>0 && strlen($login)>0 && strlen($password1)>0){
 			//codes go here.
 			try {
-				$db = pg_connect("host=localhost port=5432 dbname=sampleapi user=postgres password=rashid");
+				$db = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=rashid");
 			}catch (Exception $e) {
 				die("Error in connection: " . pg_last_error());
 			}
 
-			$query = "INSERT INTO users VALUES ('$firstname','$lastname', '$login', '$password1', '$password2')";
+			$query = "INSERT INTO users(firstname, lastname, displayname, login, password) VALUES ('$firstname','$lastname', '$displayName', '$login', '$password1')";
 			$result = pg_query($query);
 			if($result != 'FALSE'){
-				header('Location: index.php');
 				$_SERVER['user_data'] = array($login, $password1);
 			} else {
 				$errMessage = 'There was a connection error. Please, try again.';
 			}
+
+			header('Location: index.php');
 		}
 		else{
 			$_SERVER['user_data'] = array($firstname, $lastname, $login, $password1, $password2);

@@ -25,10 +25,7 @@
 			while ($row = pg_fetch_array($result)) {
 				$userID = $row['id'];
 			}
-		}
-		
-		if(pg_num_rows($result) < 1){
-			$_SESSION['catalog'] = array($id, $name, $recipe, $userID);
+		} else {
 			header('Location: login.php');
 		}
 	} else {

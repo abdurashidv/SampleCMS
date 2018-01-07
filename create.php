@@ -58,9 +58,10 @@
         
         if(isset($_POST['update']))
 		{
-			$one = $_POST['name'];
-			$two = $_POST['recipe'];
-			$query = "UPDATE catalogs SET name = $one, recipe = $two WHERE id = $catalogID";
+			$name = $_POST['name'];
+            $recipe = $_POST['recipe'];
+
+            $query = "UPDATE catalogs SET name = $name, recipe = $recipe WHERE id = $catalogID";
 			$result = pg_query($query);
 
 			if( $result != 'FALSE' ){

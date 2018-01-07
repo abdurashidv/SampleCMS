@@ -41,7 +41,7 @@
         $recipe = $_POST['recipe'];
 
         if( strlen($name) > 0 && strlen($recipe) > 0 ){
-            $query = "INSERT INTO catalogs VALUES ('5', '$name','$recipe','$userID')";
+            $query = "INSERT INTO catalogs(name, recipe, userid) VALUES ('$name','$recipe','$userID')";
             $result = pg_query($query);
 
             if($result != 'FALSE'){
@@ -54,14 +54,14 @@
 
     //EDIT
     if(isset($_GET['process']) && $_GET['process'] == 'edit'){
-        $catalogID = $_GET['catalogid'];        
-        
+        $catalogID = trim($_GET['catalogid']);
+
         if(isset($_POST['update']))
 		{
 			$name = $_POST['name'];
             $recipe = $_POST['recipe'];
 
-            $query = "UPDATE catalogs SET name = $name, recipe = $recipe WHERE id = $catalogID";
+            $query = "UPDATE catalogs SET name = '$name', recipe = '$recipe' WHERE id = '$catalogID'";
 			$result = pg_query($query);
 
 			if( $result != 'FALSE' ){
@@ -108,7 +108,7 @@
                         <textarea name="recipe" class="form-control" placeholder="Recipe" cols="30" rows="4"><?php echo isset($arrData[1]) ? $arrData[1] : ''  ?></textarea>
                     </div>
                     <div class="col">
-                        <button name="create" type="submit" class="btn btn-lg btn-primary btn-block"><?php echo $process == 'edit'? 'UPDATE' : 'CREATE' ?></button>
+                        <button name=<?php echo $process == 'edit'? 'update' : 'create' ?> type="submit" class="btn btn-lg btn-primary btn-block"><?php echo $process == 'edit'? 'UPDATE' : 'CREATE' ?></button>
                     </div>
                 </div>
             </form>

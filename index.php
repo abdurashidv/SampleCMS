@@ -2,11 +2,13 @@
 
     session_start();
 
-    //variables
-    $login = "";    
-    $password = "";
-	$errMessage = '';
+    require "classes/connect.php";
+    require "classes/user.php";
+
     $_SESSION['user_data'] = '';
+
+    $connect = new Connect();
+    $user = new User();
 
     //Login Process
     if(isset($_POST['submit'])) {
@@ -14,19 +16,14 @@
         $password = pg_escape_string($_POST['inputPassword']);
 
 		if(strlen($login)>0 && strlen($password)>0){
-			try {
-				$db = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=rashid");
-			}catch (Exception $e) {
-				die("Error in connection: " . pg_last_error());
-			}
-
-			$query = "SELECT firstname, lastname, login, password FROM users WHERE login = '$login' AND password = '$password'";
-            $result = pg_fetch_array(pg_query($query));
-
+            $connect->connectDatabase("localhost", "5432", "postgres", "postgres", "rashid");
+            $result = $user->loginUser($login, $password);
 
             if($result != 'FALSE'){
                 $_SESSION["user_data"] = array($login, $password);
-				pg_close($db);
+                
+                $connect->disconnectDatabase();
+                
 				header("Location: catalog.php");
             } else {
 				$errMessage = "There is not such a user.<br>Please check you login and password.";

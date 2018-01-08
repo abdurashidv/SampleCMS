@@ -12,15 +12,11 @@ class Recipe {
         return $this->result != 'FALSE' ? true : false;
     }
 
-    public function createRecipe(string $name, string $login, string $password): boolean {
-        if( strlen($name) > 0 && strlen($recipe) > 0 ){
-            $this->query = "INSERT INTO catalogs VALUES ('5', '$name','$recipe','$userID')";
-            $this->result = pg_query($this->query);
+    public function createRecipe(string $name, string $recipe, string $userID): boolean {
+        $this->query = "INSERT INTO catalogs(name, recipe, userid) VALUES ($name','$recipe','$userID')";
+        $this->result = pg_query($this->query);
 
-            return $this->result != 'FALSE' ? true : false;
-        }
-
-        return false;
+        return $this->result != 'FALSE' ? true : false;
     }
 
     public function editRecipe(string $catalogID, string $name, string $recipe): boolean {

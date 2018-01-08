@@ -1,33 +1,24 @@
 <?php
 	session_start();
 
+	require "classes/connect.php";
+    require "classes/user.php";
+
 	//variables
 	$output = "";
-	$userID = "";
-	$errorMessage = "";
+	$connect = new Connect();
+    $user = new User();
 
 	//CHECK USER
 	if(isset($_SESSION['user_data'][0]) && isset($_SESSION['user_data'][1])) {
         $login = $_SESSION['user_data'][0];
 		$password = $_SESSION['user_data'][1];
 		
-		try {
-			//connection to database;			
-			$db = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=rashid");
-		}catch (Exception $e) {
-			die("Error in connection: " . pg_last_error());
-		}
-		
-		$query = "SELECT id, firstname, lastname FROM users WHERE login = '$login' AND password = '$password' ";
-		$result = pg_query($query);
+		$connect->connectDatabase("localhost", "5432", "postgres", "postgres", "rashid");
+		$userID = $user->getUserID($login, $password);
 
-		if( $result != 'FALSE' ){
-			while ($row = pg_fetch_array($result)) {
-				$userID = $row['id'];
-			}
-		} else {
-			header('Location: login.php');
-		}
+		if( $userID < 0 ) header('Location: login.php');
+
 	} else {
 		//if user is not in the database send to login page
 		header('Location: login.php');

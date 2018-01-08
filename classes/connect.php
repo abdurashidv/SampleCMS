@@ -4,9 +4,9 @@ class Connect {
 
     private $db;
 
-    public function connectDatabase(string $dbname, string $user, string $password): string {
+    public function connectDatabase(string $host, string $port, string $dbname, string $user, string $password) {
         try {
-			$this->db = pg_connect("host=localhost port=5432 dbname=$dbname user=$user password=$password");
+			$this->db = pg_connect("host=" . $host . " port=" . $port . " dbname=" . $dbname . " user=" . $user . " password=" . $password);
 		}catch (Exception $e) {
 			die("Error in connection: " . pg_last_error());
 		}
